@@ -1,0 +1,74 @@
+version: '3'
+services:
+
+  ############################################################
+  # Databases
+  
+  #mariadb:
+  #  image: mariadb:10.4
+  #  restart: always
+  #  ports:
+  #    - '3306:3306'
+  #  volumes:
+  #    - 'mariadb_data:/var/lib/mysql'
+  #  environment:
+  #    - MYSQL_ROOT_PASSWORD=strenggeheim
+  #    - MYSQL_DATABASE=laravel
+  #    - MYSQL_USER=laravel
+  #    - MYSQL_PASSWORD=laravel
+  #  networks:
+  #    - private_network
+  
+  mysqldb:
+    image: mysql:5.7
+    #command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - '3306:3306'
+    volumes:
+      - 'mysqldb_data:/var/lib/mysql'
+    environment:
+      - MYSQL_ROOT_PASSWORD=strenggeheim
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laravel
+      - MYSQL_PASSWORD=laravel
+    networks:
+      - private_network
+      
+#  phpmyadmin:
+#    #image: phpmyadmin/phpmyadmin
+#    build: 'phpmyadmin/.'
+#    depends_on:
+#      - mariadb
+#      - mysqldb
+#    ports:
+#      - '2080:80'
+#    environment:
+#      - PMA_HOSTS=mariadb,mysqldb
+#      - PMA_PORTS=3306,3306
+#      - PMA_USER=root
+#      - PMA_PASSWORD=strenggeheim
+#    networks:
+#      - private_network
+  
+  ######################################################################
+  # Webservice 
+  laravel:
+    build: 'laravel/.'
+    ports:
+      - '80:80'
+    volumes:
+      - '.:/apache/www'
+    networks:
+      - private_network          
+ 
+volumes:
+  mariadb_data:
+    driver: local
+  mysqldb_data:
+    driver: local
+    
+networks:
+  private_network:
+    driver: bridge
+    
