@@ -59,6 +59,7 @@ services:
       - '80:80'
     volumes:
       - '.:/apache/www'
+      - './apache_laravel.conf:/apache/sites-enabled/apache_laravel.conf'
     networks:
       - private_network          
  
